@@ -1,67 +1,158 @@
 <template>
   <div>
-      {{chartData[0]}}
-      {{chartData[1]}}
-      {{singleEmployee}}
-        <GChart
-    :settings="{packages: ['bar']}"    
-    :data="chartData"
-    :options="chartOptions"
-    :createChart="(el, google) => new google.charts.Bar(el)"
-    @ready="onChartReady"
-  />
+    <div>
+      <div class="profileInfo my-4">
+        <strong>Job Id - {{ singleEmployee.id }}</strong>
+        <label
+          >Name:<strong
+            >{{ singleEmployee.firstName }}
+            {{ singleEmployee.lastName }}</strong
+          ></label
+        >
+      </div>
+      <div class="profileInfo my-4">
+        <div>
+          <label class="mx-2">Email - </label>
+          <strong class="mx-2">{{ singleEmployee.email }}</strong>
+        </div>
+        <div>
+          <label>Country - </label>
+          <strong>{{ singleEmployee.country }}</strong>
+        </div>
+      </div>
+      <div class="profileInfo my-4">
+        <div>
+          <label class="mx-2">Job Title -</label>
+          <strong class="mx-2">{{ singleEmployee.jobTitle }}</strong>
+        </div>
+        <div>
+          <label>Total Salary in 4Quarter - </label>
+          <strong>{{ totalSalary }} $</strong>
+        </div>
+      </div>
+       <div class="profileInfo my-4">
+        <div>
+          
+        </div>
+        <div>
+          <label>Total WorkHour in 4Quarter - </label>
+          <strong>{{ totalWorkHour }} hr</strong>
+        </div>
+      </div>
+    </div>
+
+    <div id="chart">
+      <apexchart
+        type="line"
+        height="350"
+        :options="chartOptions"
+        :series="series"
+      ></apexchart>
+    </div>
+    <!-- {{chartData[0]}}
+      {{chartData[1]}} -->
+    {{ singleEmployee }}
   </div>
 </template>
 
 <script>
-import { GChart } from 'vue-google-charts'
+import VueApexCharts from "vue-apexcharts";
 
 export default {
-    components: {
-    GChart
-  },
-  computed: {
-    chartOptions () {
-      if (!this.chartsLib) return null
-      return this.chartsLib.charts.Bar.convertOptions({
-        chart: {
-          title: 'Company Performance',
-          subtitle: 'Sales, Expenses, and Profit: 2014-2017'
+  data() {
+    return {
+      totalSalary: 0,
+      totalWorkHour:0,
+      series: [
+        {
+          name: "Salary",
+          type: "column",
+          data: [],
         },
-        bars: 'vertical', // Required for Material Bar Charts.
-        hAxis: { format: 'decimal' },
-        height: 400,
-        colors: ['#1b9e77', '#d95f02']
+        {
+          name: "Working Hour",
+          type: "line",
+          data: [],
+        },
+      ],
+      chartOptions: {
+        chart: {
+          height: 350,
+          type: "line",
+        },
+        stroke: {
+          width: [0, 4],
+        },
+        title: {
+          text: "Employee Yearly Chart",
+        },
+        dataLabels: {
+          enabled: true,
+          enabledOnSeries: [1],
+        },
+        xaxis: {
+          categories: ["Q1", "Q2", "Q3", "Q4"],
+        },
+        // labels: ['Q1','Q2','Q3','Q4'],
+        /* xaxis: {
+              type: 'datetime'
+            }, */
+        yaxis: [
+          {
+            title: {
+              text: "Salary",
+            },
+          },
+          {
+            opposite: true,
+            title: {
+              text: "Working Hour",
+            },
+          },
+        ],
+      },
+    };
+  },
+  mounted() {
+    const salaryValue = Object.keys(this.singleEmployee)
+      .filter((ele) => {
+        return ele.includes("salary");
       })
-    }
+      .map((ele) => {
+        this.totalSalary += this.singleEmployee[ele];
+        return this.singleEmployee[ele];
+      });
+    console.log(salaryValue);
+    this.series[0].data = salaryValue;
+    const workingHours = Object.keys(this.singleEmployee)
+      .filter((ele) => {
+        return ele.includes("wHour");
+      })
+      .map((ele) => {
+        this.totalWorkHour += this.singleEmployee[ele]
+        return this.singleEmployee[ele];
+      });
+    this.series[1].data = workingHours;
+
+    console.log(workingHours);
+    // this.series[0].data.push()
   },
-  data(){
-      return {
-          chartsLib: null, 
-      // Array will be automatically processed with visualization.arrayToDataTable function
-      chartData: [
-        ['Year', 'Salary', 'Hour'],
-        ['Quarter1', 1000, 400],
-        ['Quarter2', 1170, 460],
-        ['Quarter3', 660, 1120],
-        ['Quarter4', 1030, 540]
-      ]
-      }
-  },
-  created(){
-      
-    //   const chartData = this.singleEmployee
-  },
-   methods: {
-    onChartReady (chart, google) {
-      this.chartsLib = google
-    }
+  components: {
+    apexchart: VueApexCharts,
   },
   props: {
     singleEmployee: { type: Object, required: true, default: () => {} },
   },
+  beforeDestroy() {
+    console.log("Destroyed");
+  },
 };
 </script>
 
-<style lang="scss" scoped>
+<style>
+.profileInfo {
+  display: flex;
+  justify-content: space-between;
+  margin: 15px;
+}
 </style>

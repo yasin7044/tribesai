@@ -2,21 +2,24 @@
   <div>
     <!-- <pre>{{ employee }}</pre> -->
     <vs-row>
+
       <vs-button @click="GenerateData()">Generating Random Data</vs-button>
+
       <vs-card>
-        <data-listing :employee="employee"
-        @singleViewOpen="singleViewOpen"
+        <data-listing
+          :employee="employee"
+          @singleViewOpen="singleViewOpen"
         ></data-listing>
       </vs-card>
     </vs-row>
-    <div v-if="singleEmployee">
+    <div v-if="singleViewPopUp">
       <vs-popup
         class="holamundo"
-        :title="singleEmployee.firstName"
+        :title="`${singleEmployee.firstName} Profile Info`"
         :active.sync="singleViewPopUp"
       >
-        <single-employee
-        :singleEmployee="singleEmployee"
+        <single-employee :singleEmployee="singleEmployee"
+        v-if="singleViewPopUp"
         ></single-employee>
         <!-- <pre>{{event}}</pre> -->
         <!-- <event-detail :eachEventInfo="eachEventInfo"></event-detail> -->
@@ -32,10 +35,19 @@ import SingleEmployee from "@/components/SingleEmployee.vue";
 export default {
   components: {
     DataListing,
-    SingleEmployee
+    SingleEmployee,
+    
+  },
+  watch:{
+      singleViewPopUp(){
+          if(!this.singleViewPopUp){
+              this.singleEmployee = null
+          }
+      }
   },
   data() {
     return {
+        maximizeCard:true,
       singleViewPopUp: false,
       singleEmployee: null,
       id: "",
@@ -71,12 +83,12 @@ export default {
     console.log(createName);
   },
   methods: {
-      singleViewOpen(employeeObject){
-          this.singleEmployee = employeeObject
-                    this.singleViewPopUp = true
+    singleViewOpen(employeeObject) {
+      this.singleEmployee = employeeObject;
+      this.singleViewPopUp = true;
 
-        //   console.log(object)
-      },
+      //   console.log(object)
+    },
     getRandomInt(min, max) {
       min = Math.ceil(min);
       max = Math.floor(max);
@@ -115,10 +127,10 @@ export default {
           salaryQ2: this.getRandomInt(5000, 10000),
           salaryQ3: this.getRandomInt(5000, 10000),
           salaryQ4: this.getRandomInt(5000, 10000),
-          wHourQ1: this.getRandomInt(6, 10),
-          wHourQ2: this.getRandomInt(6, 10),
-          wHourQ3: this.getRandomInt(6, 10),
-          wHourQ4: this.getRandomInt(6, 10),
+          wHourQ1: this.getRandomInt(700, 1000),
+          wHourQ2: this.getRandomInt(700, 1000),
+          wHourQ3: this.getRandomInt(700, 1000),
+          wHourQ4: this.getRandomInt(700, 1000),
           get email() {
             return `${this.firstName}_${this.lastName}@${vm.getUniqueValue(
               vm.emailType
