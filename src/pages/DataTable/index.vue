@@ -2,13 +2,13 @@
   <div>
     <!-- <pre>{{ employee }}</pre> -->
     <vs-row>
-
       <vs-button @click="GenerateData()">Generating Random Data</vs-button>
 
       <vs-card>
         <data-listing
           :employee="employee"
           @singleViewOpen="singleViewOpen"
+          @editingEmit="editingEmit"
         ></data-listing>
       </vs-card>
     </vs-row>
@@ -18,11 +18,25 @@
         :title="`${singleEmployee.firstName} Profile Info`"
         :active.sync="singleViewPopUp"
       >
-        <single-employee :singleEmployee="singleEmployee"
-        v-if="singleViewPopUp"
+        <single-employee
+          :singleEmployee="singleEmployee"
+          v-if="singleViewPopUp"
         ></single-employee>
-        <!-- <pre>{{event}}</pre> -->
-        <!-- <event-detail :eachEventInfo="eachEventInfo"></event-detail> -->
+      </vs-popup>
+    </div>
+    <div v-if="employeeEventPopUp">
+      <vs-popup
+        class="holamundo"
+        title="Employee Info "
+        :active.sync="employeeEventPopUp"
+      >
+        <create-update-employee
+          :editingObject="editingObject"
+          :editingIndex="editingIndex"
+          @createdObject="createdObject"
+          :countryList="countryList"
+          :jobTitleList="jobTitle"
+        ></create-update-employee>
       </vs-popup>
     </div>
   </div>
@@ -31,25 +45,27 @@
 <script>
 import DataListing from "@/components/DataListing.vue";
 import SingleEmployee from "@/components/SingleEmployee.vue";
+import CreateUpdateEmployee from "@/components/CreateUpdateEmployee.vue";
 
 export default {
   components: {
     DataListing,
     SingleEmployee,
-    
+    CreateUpdateEmployee,
   },
-  watch:{
-      singleViewPopUp(){
-          if(!this.singleViewPopUp){
-              this.singleEmployee = null
-          }
+  watch: {
+    singleViewPopUp() {
+      if (!this.singleViewPopUp) {
+        this.singleEmployee = null;
       }
+    },
   },
   data() {
     return {
-        maximizeCard:true,
+      employeeEventPopUp: false,
+      maximizeCard: true,
       singleViewPopUp: false,
-      singleEmployee: null,
+
       id: "",
       employee: [],
       countryList: [
@@ -74,6 +90,8 @@ export default {
       ],
       emailType: ["gmail", "yahoo", "tribes", "codelogicx", "abc", "outlook"],
       emailSubDomain: ["org", "com", "in", "edu"],
+      editingObject: null,
+      editingIndex: null,
     };
   },
   mounted() {
@@ -151,6 +169,40 @@ export default {
                 }
             }) */
       console.log("Hi");
+    },
+    editingEmit(paylaodObject) {
+      this.editingObject = paylaodObject.editingObject;
+      this.editingIndex = paylaodObject.index;
+      this.employeeEventPopUp = true;
+      console.log(paylaodObject);
+    },
+    createdObject(addedObject) {
+      console.log("hi");
+      console.log(addedObject);
+      if ("index" in addedObject) {
+        const index = addedObject.index;
+        this.employee[index].jobTitle = addedObject.jobTitle;
+        this.employee[index].firstName = addedObject.firstName;
+        this.employee[index].lastName = addedObject.lastName;
+        this.employee[index].country = addedObject.country;
+        this.employee[index].salaryQ1 = addedObject.salaryQ1;
+        this.employee[index].salaryQ2 = addedObject.salaryQ2;
+        this.employee[index].salaryQ3 = addedObject.salaryQ3;
+        this.employee[index].salaryQ4 = addedObject.salaryQ4;
+        this.employee[index].wHourQ1 = addedObject.wHourQ1;
+        this.employee[index].wHourQ2 = addedObject.wHourQ2;
+        this.employee[index].wHourQ3 = addedObject.wHourQ3;
+        this.employee[index].wHourQ4 = addedObject.wHourQ4;
+        this.employee[index].email = addedObject.email;
+        this.showSuccessMessage(
+          "success",
+          "Employee Updated Successfully",
+          "success"
+        );
+        this.editingObject = null;
+        this.editingIndex = null;
+        this.employeeEventPopUp = false;
+      }
     },
   },
 };

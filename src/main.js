@@ -5,6 +5,9 @@ import "material-icons/iconfont/material-icons.css"; //Material Icons
 
 Vue.config.productionTip = false;
 
+import VeeValidate from 'vee-validate'
+Vue.use(VeeValidate)
+
 // import 'vuesax/dist/vuesax.css' //Vuesax styles
 // Vue.use(Vuesax, {
 //   // options here

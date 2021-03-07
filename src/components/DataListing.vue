@@ -43,11 +43,11 @@
             {{ data[indextr].jobTitle }}
           </vs-td>
           <vs-td :data="data[indextr].email">
-            {{ data[indextr].email }}
+            {{ data[indextr].email |lowerCase}} 
           </vs-td>
           <vs-td :data="data[indextr].firstName">
-            {{ data[indextr].firstName }}
-            {{ data[indextr].lastName }}
+            {{ data[indextr].firstName | capitalize}}
+            {{ data[indextr].lastName | capitalize}}
           </vs-td>
           <vs-td :data="data[indextr].country">
             {{ data[indextr].country }}
@@ -74,26 +74,41 @@
               icon="preview"
             ></vs-button>
             <vs-button
-              @click="openConfirm(data[indextr].id, data[indextr])"
+              @click="editingEmployee(indextr, data[indextr])"
               color="primary"
               icon="edit"
             ></vs-button>
             <vs-button
               @click="deletingEmployee(indextr)"
-              color="primary"
+              color="danger"
               icon="delete"
             ></vs-button>
           </vs-td>
         </vs-tr>
       </template>
     </vs-table>
+     <div v-if="employeeEventPopUp">
+      <vs-popup class="holamundo" title="Employee Info " :active.sync="employeeEventPopUp">
+        <create-update-employee
+          :editingObject="editingObject"
+        ></create-update-employee>
+      </vs-popup>
+    </div>
   </div>
 </template>
 
 <script>
+import CreateUpdateEmployee from "../components/CreateUpdateEmployee.vue";
+
 export default {
+  components: {
+    CreateUpdateEmployee
+  },
   data() {
     return {
+       employeeEventPopUp:false,
+       editingObject:null,
+      singleEmployee: null,
       salaryCheckbox: {
         Q1: true,
         Q2: true,
@@ -105,6 +120,16 @@ export default {
 
   props: {
     employee: { type: Array, required: true, default: () => {} },
+  },
+  filters:{
+    capitalize(value) {
+    if (!value) return ''
+    value = value.toString()
+    return value.charAt(0) + value.slice(1).toLowerCase()
+  },
+    lowerCase(value){
+      return value.toLowerCase()
+    }
   },
   methods: {
     setSingleEmployee(singleEmployee) {
@@ -169,6 +194,17 @@ export default {
     deletingEmployee(index){
       this.employee.splice(index,1)
       this.showSuccessMessage('Deleted','Employee Deleted Successfully','success')
+    },
+    editingEmployee(index,editingObject){
+      const editingPayload={
+        editingObject,
+        index
+      }
+      this.$emit('editingEmit',editingPayload)
+      /* console.log(index)
+      console.log(editingObject)
+      this.editingObject = editingObject
+      this.employeeEventPopUp = true */
     }
   },
 };
