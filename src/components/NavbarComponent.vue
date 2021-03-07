@@ -10,12 +10,7 @@
       <vs-navbar-item index="0">
         <a href="#">Home</a>
       </vs-navbar-item>
-      <vs-navbar-item index="1">
-        <a href="#">News</a>
-      </vs-navbar-item>
-      <vs-navbar-item index="2">
-        <a href="#">Update</a>
-      </vs-navbar-item>
+      
     </vs-navbar>
   </div>
 </template>

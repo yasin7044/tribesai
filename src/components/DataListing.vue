@@ -1,6 +1,5 @@
 <template>
   <div>
-    {{employee[0]}}
     <vs-table :data="employee" pagination max-items="10" stripe
     noDataText="No Employee Data Available"
     >
