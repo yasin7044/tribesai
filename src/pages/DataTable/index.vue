@@ -1,9 +1,31 @@
 <template>
   <div>
+    <!-- {{oldEmployeeData}} -->
+    <vs-card style="margin-top: 1%">
+      <div slot="header">Card</div>
+      <strong v-if="search.length">Searching With Value {{ search }}</strong>
+
+      <vs-input v-model="search" @input="searchValue()" />
+
+      <vs-row vs-type="flex" vs-justify="flex-end" vs-align="center">
+        <vs-button
+          color="dark"
+          type="gradient"
+          style="margin-right: 1%"
+          @click="employeeEventPopUp = true"
+        >
+          Create New Employee
+        </vs-button>
+
+        <vs-button @click="GenerateData()" color="dark" type="gradient"
+          >Generating Random Data</vs-button
+        >
+      </vs-row>
+
+      <!-- table -->
+    </vs-card>
     <!-- <pre>{{ employee }}</pre> -->
     <vs-row>
-      <vs-button @click="GenerateData()">Generating Random Data</vs-button>
-
       <vs-card>
         <data-listing
           :employee="employee"
@@ -46,8 +68,9 @@
 import DataListing from "@/components/DataListing.vue";
 import SingleEmployee from "@/components/SingleEmployee.vue";
 import CreateUpdateEmployee from "@/components/CreateUpdateEmployee.vue";
-
+import { SearchAndFilter } from "@/mixins/SearchAndFilter.js";
 export default {
+  mixins: [SearchAndFilter],
   components: {
     DataListing,
     SingleEmployee,
@@ -76,8 +99,9 @@ export default {
         "Australia",
         "Italy",
         "Canada",
-        "Italy",
+        "NetherLand",
         "Spain",
+        "Singapore",
       ],
       jobTitle: [
         "Full Stack Developer",
@@ -157,6 +181,8 @@ export default {
         });
       }
 
+      this.oldEmployeeData = [...this.employee];
+
       setTimeout(() => {
         this.$vs.loading.close();
       }, 2);
@@ -179,7 +205,7 @@ export default {
     createdObject(addedObject) {
       console.log("hi");
       console.log(addedObject);
-      if ("index" in addedObject) {
+      if (addedObject.index) {
         const index = addedObject.index;
         this.employee[index].jobTitle = addedObject.jobTitle;
         this.employee[index].firstName = addedObject.firstName;
@@ -194,6 +220,17 @@ export default {
         this.employee[index].wHourQ3 = addedObject.wHourQ3;
         this.employee[index].wHourQ4 = addedObject.wHourQ4;
         this.employee[index].email = addedObject.email;
+        this.showSuccessMessage(
+          "success",
+          "Employee Updated Successfully",
+          "success"
+        );
+        this.editingObject = null;
+        this.editingIndex = null;
+        this.employeeEventPopUp = false;
+      } else {
+        (addedObject.id = `Job#${this.id++ + 1}`),
+          this.employee.push(addedObject);
         this.showSuccessMessage(
           "success",
           "Employee Updated Successfully",

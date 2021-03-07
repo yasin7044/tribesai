@@ -1,17 +1,16 @@
 <template>
   <form data-vv-scope="Employee">
-    <label>Email:{{ email }}</label>
-    <!-- {{ editingObject }} -->
-    <!-- <pre>{{ userList }}</pre>
-    <pre>{{ clientList }}</pre> -->
-    <!-- <pre> {{ editingObject }}</pre> -->
-    <v-select :options="jobTitleList"
-    v-model="jobTitle"
-    v-validate="'required'"
-    placeholder="Job Title"
-    data-vv-name="jobTitle"
+    <label v-if="editingIndex">Email:{{ email }}</label>
+    <v-select
+          class="w-full mb-2"
+
+      :options="jobTitleList"
+      v-model="jobTitle"
+      v-validate="'required'"
+      placeholder="Job Title"
+      data-vv-name="jobTitle"
     ></v-select>
-     <div
+    <div
       v-if="errors.has('Employee.jobTitle')"
       style="color: red"
       class="invalid-feedback"
@@ -51,10 +50,11 @@
     >
       {{ errors.first("Employee.lastName") }}
     </div>
-   <!--  <vs-input
+
+     <vs-input
+     v-if="!editingIndex"
       class="w-full mb-2"
       label="email"
-      placeholder="Add lastName"
       v-validate="'required|email'"
       data-vv-name="email"
       v-model="email"
@@ -66,14 +66,16 @@
       class="invalid-feedback"
     >
       {{ errors.first("Employee.email") }}
-    </div> -->
-     <v-select :options="countryList"
-    v-model="country"
-    placeholder="Job Title"
-          v-validate="'required'"
-                data-vv-name="country"
+    </div>
+   
+    <v-select
+          class="w-full my-2"
 
-
+      :options="countryList"
+      v-model="country"
+      placeholder="Country"
+      v-validate="'required'"
+      data-vv-name="country"
     ></v-select>
     <div
       v-if="errors.has('Employee.country')"
@@ -216,16 +218,16 @@
   </form>
 </template>
 <script>
-import vSelect from 'vue-select'
-import 'vue-select/dist/vue-select.css';
+import vSelect from "vue-select";
+import "vue-select/dist/vue-select.css";
 
 export default {
-    components: {
-        vSelect
-    },
+  components: {
+    vSelect,
+  },
   props: {
-      jobTitleList:{},
-      countryList:{},
+    jobTitleList: {},
+    countryList: {},
     editingObject: {},
     editingIndex: {},
   },
@@ -267,12 +269,12 @@ export default {
             wHourQ4: this.wHourQ4,
             email: this.email,
           };
-          payload.index = this.editingIndex
+          payload.index = this.editingIndex;
 
-          console.log(payload)
+          console.log(payload);
 
           this.$emit("createdObject", payload);
-          console.log('hii')
+          console.log("hii");
         } else {
           this.showSuccessMessage(
             "Not Validated",

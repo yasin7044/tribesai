@@ -1,7 +1,9 @@
 <template>
   <div>
     {{employee[0]}}
-    <vs-table :data="employee" pagination max-items="10" stripe>
+    <vs-table :data="employee" pagination max-items="10" stripe
+    noDataText="No Employee Data Available"
+    >
       <template slot="header">
         <h3>Employee Table</h3>
       </template>
@@ -153,7 +155,7 @@ export default {
 
       if (totalSalary.length) {
         return totalSalary.reduce((acc, val) => {
-          return acc + val;
+          return parseInt(acc) + parseInt(val);
         });
       } else {
         return 0;
