@@ -2,8 +2,7 @@
   <form data-vv-scope="Employee">
     <label v-if="editingIndex">Email:{{ email }}</label>
     <v-select
-          class="w-full mb-2"
-
+      class="cselect mb-2"
       :options="jobTitleList"
       v-model="jobTitle"
       v-validate="'required'"
@@ -51,8 +50,8 @@
       {{ errors.first("Employee.lastName") }}
     </div>
 
-     <vs-input
-     v-if="!editingIndex"
+    <vs-input
+      v-if="!editingIndex"
       class="w-full mb-2"
       label="email"
       v-validate="'required|email'"
@@ -67,10 +66,9 @@
     >
       {{ errors.first("Employee.email") }}
     </div>
-   
-    <v-select
-          class="w-full my-2"
 
+    <v-select
+      class="cselect mb-2"
       :options="countryList"
       v-model="country"
       placeholder="Country"
@@ -207,11 +205,11 @@
     >
       {{ errors.first("Employee.wHourQ4") }}
     </div>
-    <div class="mt-4 text-right">
-      <vs-button class="ml-2" @click="createdOrUpdate()" v-if="!editingObject"
+    <div class="mb-2">
+      <vs-button class="mb-2" @click="createdOrUpdate()" v-if="!editingObject"
         >Save</vs-button
       >
-      <vs-button class="ml-2" @click="createdOrUpdate()" v-else
+      <vs-button class="mb-2" @click="createdOrUpdate()" v-else
         >Update</vs-button
       >
     </div>
@@ -231,6 +229,10 @@ export default {
     editingObject: {},
     editingIndex: {},
   },
+ /*  beforeDestroy() {
+    this.editingObject = null;
+    this.editingIndex = null;
+  }, */
   created() {
     if (this.editingObject) {
       this.jobTitle = this.editingObject.jobTitle;
@@ -305,4 +307,11 @@ export default {
 };
 </script>
 <style lang="css">
+.con-vs-popup .vs-popup {
+  width: 300px !important;
+  height: auto !important;
+}
+.cselect {
+  width: 200px;
+}
 </style>

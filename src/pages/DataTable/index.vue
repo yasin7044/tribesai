@@ -5,9 +5,23 @@
       <div slot="header">Card</div>
       <strong v-if="search.length">Searching With Value {{ search }}</strong>
 
-      <vs-input v-model="search" @input="searchValue()" />
+      <vs-input
+        v-model="search"
+        @input="searchValue()"
+        placeholder="Search with any field"
+      />
 
       <vs-row vs-type="flex" vs-justify="flex-end" vs-align="center">
+        <v-select
+        class="filterSelect"
+          :options="countryList"
+          v-model="filterCountry"
+          placeholder="Filer by Country"
+          v-validate="'required'"
+          data-vv-name="country"
+          
+          @input="filerByCountry()"
+        ></v-select>
         <vs-button
           color="dark"
           type="gradient"
@@ -53,6 +67,7 @@
         :active.sync="employeeEventPopUp"
       >
         <create-update-employee
+        v-if="employeeEventPopUp"
           :editingObject="editingObject"
           :editingIndex="editingIndex"
           @createdObject="createdObject"
@@ -69,12 +84,15 @@ import DataListing from "@/components/DataListing.vue";
 import SingleEmployee from "@/components/SingleEmployee.vue";
 import CreateUpdateEmployee from "@/components/CreateUpdateEmployee.vue";
 import { SearchAndFilter } from "@/mixins/SearchAndFilter.js";
+import vSelect from "vue-select";
+import "vue-select/dist/vue-select.css";
 export default {
   mixins: [SearchAndFilter],
   components: {
     DataListing,
     SingleEmployee,
     CreateUpdateEmployee,
+    vSelect,
   },
   watch: {
     singleViewPopUp() {
@@ -82,6 +100,12 @@ export default {
         this.singleEmployee = null;
       }
     },
+     employeeEventPopUp(){
+      if(!this.employeeEventPopUp){
+        this.editingObject = null;
+        this.editingIndex = null;
+      }
+    }
   },
   data() {
     return {
@@ -116,6 +140,7 @@ export default {
       emailSubDomain: ["org", "com", "in", "edu"],
       editingObject: null,
       editingIndex: null,
+      oldEmployeeData:[],
     };
   },
   mounted() {
@@ -233,7 +258,7 @@ export default {
           this.employee.push(addedObject);
         this.showSuccessMessage(
           "success",
-          "Employee Updated Successfully",
+          "Employee Created Successfully",
           "success"
         );
         this.editingObject = null;
@@ -245,5 +270,9 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="css" scoped>
+.filterSelect{
+  width: 130px;
+  margin:0px 10px;
+}
 </style>
