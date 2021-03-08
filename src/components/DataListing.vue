@@ -139,7 +139,6 @@ export default {
     },
     totalSalary(eachEmployee,keyValue) {
       const selectedCheckbox = this.getSelectedCheckbox();
-      console.log(selectedCheckbox);
       // this.getSelectedCheckbox()
       const totalSalary = Object.keys(eachEmployee)
         .filter((ele) => {
@@ -159,18 +158,10 @@ export default {
       } else {
         return 0;
       }
-
-      // return totalSalary
-      // console.log(totalSalary)
-      /*  .reduce((acc, val) => {
-          return acc + val;
-        });
-      return totalSalary; */
     },
     getSelectedCheckbox() {
       const trueSelectedFilter = Object.keys(this.salaryCheckbox)
         .map((ele, index) => {
-          console.log(this.salaryCheckbox[ele]);
           if (this.salaryCheckbox[ele] === true) {
             return index;
           }
@@ -181,7 +172,6 @@ export default {
         });
 
       return trueSelectedFilter;
-      // console.log(trueSelectedFilter);
     },
     totalSelctedQuarter(){
             const selectedCheckbox =  Object.keys(this.salaryCheckbox).filter(ele=>{
@@ -202,10 +192,6 @@ export default {
         index
       }
       this.$emit('editingEmit',editingPayload)
-      /* console.log(index)
-      console.log(editingObject)
-      this.editingObject = editingObject
-      this.employeeEventPopUp = true */
     }
   },
 };

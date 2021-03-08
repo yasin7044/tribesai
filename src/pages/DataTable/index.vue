@@ -183,7 +183,6 @@ export default {
       const vm = this;
 
       for (let i = 0; i < 1000; i++) {
-        console.log(i);
         this.employee.push({
           id: `Job#${this.id++ + 1}`,
           jobTitle: this.getUniqueValue(this.jobTitle),
@@ -220,7 +219,6 @@ export default {
       console.log(paylaodObject);
     },
     createdObject(addedObject) {
-      console.log("hi");
       console.log(addedObject);
       if (addedObject.index) {
         const index = addedObject.index;
