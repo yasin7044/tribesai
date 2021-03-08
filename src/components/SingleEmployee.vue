@@ -30,10 +30,8 @@
           <strong>{{ totalSalary }} $</strong>
         </div>
       </div>
-       <div class="profileInfo my-4">
-        <div>
-          
-        </div>
+      <div class="profileInfo my-4">
+        <div></div>
         <div>
           <label>Total WorkHour in 4Quarter - </label>
           <strong>{{ totalWorkHour }} hr</strong>
@@ -49,9 +47,6 @@
         :series="series"
       ></apexchart>
     </div>
-    <!-- {{chartData[0]}}
-      {{chartData[1]}} -->
-    {{ singleEmployee }}
   </div>
 </template>
 
@@ -62,7 +57,7 @@ export default {
   data() {
     return {
       totalSalary: 0,
-      totalWorkHour:0,
+      totalWorkHour: 0,
       series: [
         {
           name: "Salary",
@@ -129,7 +124,7 @@ export default {
         return ele.includes("wHour");
       })
       .map((ele) => {
-        this.totalWorkHour += this.singleEmployee[ele]
+        this.totalWorkHour += this.singleEmployee[ele];
         return this.singleEmployee[ele];
       });
     this.series[1].data = workingHours;
@@ -154,5 +149,9 @@ export default {
   display: flex;
   justify-content: space-between;
   margin: 15px;
+}
+.con-vs-popup .vs-popup {
+  width: 100% !important;
+  height: auto !important;
 }
 </style>

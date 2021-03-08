@@ -182,7 +182,7 @@ export default {
       });
       const vm = this;
 
-      for (let i = 0; i < 100; i++) {
+      for (let i = 0; i < 1000; i++) {
         console.log(i);
         this.employee.push({
           id: `Job#${this.id++ + 1}`,
@@ -211,14 +211,6 @@ export default {
       setTimeout(() => {
         this.$vs.loading.close();
       }, 2);
-
-      // this.$vs.loading.close()
-
-      /*  const newData = this.employee.map(ele,index=>{
-                return {
-                    
-                }
-            }) */
       console.log("Hi");
     },
     editingEmit(paylaodObject) {
@@ -258,7 +250,7 @@ export default {
           this.employee.push(addedObject);
         this.showSuccessMessage(
           "success",
-          "Employee Created Successfully",
+          "Employee Createdf Successfully",
           "success"
         );
         this.editingObject = null;
